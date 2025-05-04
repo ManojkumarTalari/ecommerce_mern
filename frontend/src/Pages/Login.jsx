@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 const Login = () => {
   const { token, setToken, backendUrl, navigate } = useContext(ShopContext);
   const [currentState, setCurrentState] = useState('Login');
-
+  const[adminLogin,setAdminLogin]=useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -43,14 +43,23 @@ const Login = () => {
   }
 
   useEffect(() => {
-    if (token) {
+    if (token&&!adminLogin) {
       navigate('/')
     }
   }, [token])
 
+  const handleAdminLogin = () => {
+    setAdminLogin(true)
+   
+    const adminUrl = import.meta.env.VITE_ADMIN_LOGIN_URL;
+   console.log(adminUrl);
+   
+    window.location.replace(adminUrl)
+  };
   
 
   return (
+    <div className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-800'>
     <form onSubmit={onSubmitHandler} className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-800'>
       <div className='inline-flex items-center gap-2 mb-2 mt-10'>
         <p className='parata-regular text-3xl'>{currentState}</p>
@@ -70,6 +79,14 @@ const Login = () => {
       </div>
       <button className='bg-black text-white font-light px-8 py-2 mt-4'>{currentState === 'Login' ? 'Sign In' : 'Sign Up'}</button>
     </form>
+     {/* Admin Login Button */}
+     <button
+        onClick={handleAdminLogin}
+        className='mt-4 text-blue-600 underline hover:text-blue-800 text-sm'
+      >
+        Login as Admin
+      </button>
+    </div>
   )
 }
 
